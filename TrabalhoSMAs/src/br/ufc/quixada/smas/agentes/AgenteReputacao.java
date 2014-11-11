@@ -1,8 +1,10 @@
-package br.ufc.quixada.smas.model;
+package br.ufc.quixada.smas.agentes;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import br.ufc.quixada.smas.comportamento.EsperarReputacaoCyclicBehavior;
+import br.ufc.quixada.smas.objetos.ReputacaoAgente;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -36,6 +38,8 @@ public class AgenteReputacao extends Agent{
 		} catch(FIPAException e){
 			e.printStackTrace();
 		}	
+		
+		addBehaviour(new EsperarReputacaoCyclicBehavior(this));
 	}
 	
 	protected void takeDown(){
@@ -46,8 +50,5 @@ public class AgenteReputacao extends Agent{
 		} catch(FIPAException e){
 			e.printStackTrace();
 		}
-	}
-	
-	
-	
+	}	
 }

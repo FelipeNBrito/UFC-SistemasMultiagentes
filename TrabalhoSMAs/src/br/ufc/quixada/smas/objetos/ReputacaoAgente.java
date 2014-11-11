@@ -1,4 +1,4 @@
-package br.ufc.quixada.smas.model;
+package br.ufc.quixada.smas.objetos;
 
 import java.util.ArrayList;
 import java.util.Iterator;
