@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.ufc.quixada.smas.comportamento.EsperarReputacaoCyclicBehavior;
-import br.ufc.quixada.smas.objetos.ReputacaoAgente;
+import br.ufc.quixada.smas.objetos.RepositorioReputacaoAgente;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -13,13 +14,18 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class AgenteReputacao extends Agent{
 
-	private Map<String, ReputacaoAgente> reputacoes;
+	private Map<AID, RepositorioReputacaoAgente> reputacoes;
 	
+	public RepositorioReputacaoAgente getRepositorioReputacao(AID agenteAid){
+		
+		return reputacoes.get(agenteAid);
+		
+	}
 	
 	protected void setup(){
 		
 		// mapa com nome do agente e seu historico de reputacao;
-		reputacoes = new HashMap<String, ReputacaoAgente>();
+		reputacoes = new HashMap<AID, RepositorioReputacaoAgente>();
 		
 		// Cria uma entrada no DF 
 		DFAgentDescription dfd = new DFAgentDescription();
