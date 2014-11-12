@@ -33,7 +33,7 @@ public class AgenteReputacao extends Agent{
 		
 		// Criacao do servico de reputacao
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("ReputacaoAgentes");
+		sd.setType("Reputacao-Agentes");
 		sd.setName("Reputacao");
 		dfd.addServices(sd); // Adiciona o servico
 		
