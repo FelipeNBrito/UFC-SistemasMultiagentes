@@ -30,6 +30,8 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 				
 				agente.addMensagemCFP(mensagem);
 			}
+		}else{
+			block();
 		}
 	}
 

@@ -15,4 +15,8 @@ public class Cupom implements Serializable{
 		return this.Nome;
 	}
 	
+	public double getValor(){
+		return this.valor;
+	}
+	
 }

@@ -3,7 +3,7 @@ package br.ufc.quixada.smas.agentes;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.ufc.quixada.smas.comportamento.EsperarReputacaoCyclicBehavior;
+import br.ufc.quixada.smas.comportamento.agentedereputacao.EsperarReputacaoCyclicBehavior;
 import br.ufc.quixada.smas.objetos.RepositorioReputacaoAgente;
 import jade.core.AID;
 import jade.core.Agent;

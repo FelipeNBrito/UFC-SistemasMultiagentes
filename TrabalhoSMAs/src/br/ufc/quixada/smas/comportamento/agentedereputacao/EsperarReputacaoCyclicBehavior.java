@@ -1,4 +1,4 @@
-package br.ufc.quixada.smas.comportamento;
+package br.ufc.quixada.smas.comportamento.agentedereputacao;
 
 import java.io.IOException;
 
@@ -53,13 +53,14 @@ public class EsperarReputacaoCyclicBehavior extends CyclicBehaviour {
 				
 				try {
 					
+					
 					AID agenteAid = (AID) mensagem.getContentObject();
 					RepositorioReputacaoAgente repositorioReputacao = this.agenteReputacao.getRepositorioReputacao(agenteAid);
 					
 					Reputacao reputacao = repositorioReputacao.pegarReputacao();
 					
 					mensagemDeRetorno.setContentObject(reputacao);
-					
+					mensagemDeRetorno.setPerformative(ACLMessage.INFORM);
 					
 					this.agenteReputacao.send(mensagemDeRetorno);
 				

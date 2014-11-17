@@ -1,5 +1,6 @@
 package br.ufc.quixada.smas.comportamento.participante;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -46,15 +47,21 @@ public class TratarMensagemCFP extends Behaviour{
 					}
 				}
 				
-				ACLMessage reposta = cfp.createReply();
+				ACLMessage resposta = cfp.createReply();
 				
 				if(cuponsEmComum.size() > 0){
-					
+					resposta.setPerformative(ACLMessage.PROPOSE);
+					resposta.setContentObject(cuponsEmComum);
 				}else{
-					
+					resposta.setPerformative(ACLMessage.REFUSE);
 				}
 				
+				agente.send(resposta);
+				
 			} catch (UnreadableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
