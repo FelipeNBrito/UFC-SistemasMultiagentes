@@ -7,25 +7,26 @@ import java.util.List;
 
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import br.ufc.quixada.smas.objetos.Cupom;
-import br.ufc.quixada.smas.objetos.MelhorProposta;
+import br.ufc.quixada.smas.objetos.MelhorPropostaCupom;
 import br.ufc.quixada.smas.objetos.Proposta;
 import jade.core.behaviours.Behaviour;
+import jade.domain.introspection.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 public class AnalisarPropostas extends Behaviour{
 
 	private AgenteIniciante agente;
 	final private long delay = 30000;
-	private HashMap<String,MelhorProposta> melhoresPropostas;
+	private HashMap<String,MelhorPropostaCupom> melhoresPropostas;
 	
 	public AnalisarPropostas(AgenteIniciante agente) {
 		this.agente = agente;
-		melhoresPropostas = agente.getMelhoresPropostas();
+		melhoresPropostas = agente.getHashMapMelhoresPropostas();
 		Iterator<Cupom> it = agente.getListaDeCupons().iterator();
 
 		while(it.hasNext()){
 			Cupom tmp = it.next();
-			melhoresPropostas.put(tmp.toString(), new MelhorProposta(it.next()));
+			melhoresPropostas.put(tmp.toString(), new MelhorPropostaCupom(it.next()));
 		}
 	}
 	
@@ -57,10 +58,10 @@ public class AnalisarPropostas extends Behaviour{
 						
 						if(cupomVendedor.toString().equalsIgnoreCase(meuCupom.toString())){ // Se o cupom for o mesmo
 							
-							MelhorProposta melhorProposta = melhoresPropostas.get(meuCupom.toString());
+							MelhorPropostaCupom melhorProposta = melhoresPropostas.get(meuCupom.toString());
 							
 							if(melhorProposta.getVendedorAID() == null){
-								melhorProposta = new MelhorProposta(cupomVendedor);
+								melhorProposta = new MelhorPropostaCupom(cupomVendedor);
 								melhorProposta.setVendedorAID(proposta.getSender());
 								
 								melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);

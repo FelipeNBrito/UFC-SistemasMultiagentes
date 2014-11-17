@@ -14,7 +14,7 @@ import br.ufc.quixada.smas.comportamento.iniciante.PedirReputacaoDosAgentesPropo
 import br.ufc.quixada.smas.comportamento.iniciante.ReceberMensagemAgenteIniciante;
 import br.ufc.quixada.smas.objetos.Cupom;
 import br.ufc.quixada.smas.objetos.ListaDeCupons;
-import br.ufc.quixada.smas.objetos.MelhorProposta;
+import br.ufc.quixada.smas.objetos.MelhorPropostaCupom;
 import br.ufc.quixada.smas.objetos.Proposta;
 import br.ufc.quixada.smas.objetos.Reputacao;
 import jade.core.AID;
@@ -22,13 +22,17 @@ import jade.lang.acl.ACLMessage;
 
 public class AgenteIniciante extends AgenteContractNet {
 	
-	private boolean compraDeAgentesComReputacaoDesconhecida;
+	private boolean compraDeAgentesComReputacaoDesconhecida; // TODO: 
 	
 	private List<AID> agentesVendedores;
 	private ListaDeCupons cupons;
 	private HashMap<AID, Proposta> propostas;
-	private HashMap<String,MelhorProposta> melhoresPropostas; // TODO : Iniciar com null
+	private ArrayList<Proposta> propostasRejeitadasPelaReputacao; // TODO : Inicializar
+	private HashMap<String,MelhorPropostaCupom> melhoresPropostas; // TODO : Iniciar com null
 	// TODO :private List<Proposta> propostasRejetadas;
+	private List<Cupom> cuponsNaoEncontrados; //TODO : incializar
+	private ArrayList<MelhorPropostaCupom> propostasAceitas; // TODO : iniciar
+	private ArrayList<ListaDeCupons> cuponsASeremComprados; // TODO: iniciar
  	
 	
 	protected void setup(){
@@ -42,12 +46,38 @@ public class AgenteIniciante extends AgenteContractNet {
 		addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
 		addBehaviour(new AnalisarPropostas(this));
 		
+		
 		//TODO : Receber resposta das CFPs
 		
 	}
 	
-	public HashMap<String,MelhorProposta> getMelhoresPropostas(){
+	
+	public ArrayList<Proposta> getPropostasRejeitadasPelaReputacao(){
+		return propostasRejeitadasPelaReputacao;
+	}
+	
+	public void addCuponsASeremComprados(ListaDeCupons lista){
+		this.cuponsASeremComprados.add(lista);
+	}
+	
+	public ArrayList<ListaDeCupons> getCuponsASeremComprados(){
+		return this.cuponsASeremComprados;
+	}
+	
+	public void addPropostaAceita(MelhorPropostaCupom melhorProposta){
+		propostasAceitas.add(melhorProposta);
+	}
+	
+	public ArrayList<MelhorPropostaCupom> getPropostasAceitas(){
+		return this.propostasAceitas;
+	}
+	
+	public HashMap<String,MelhorPropostaCupom> getHashMapMelhoresPropostas(){
 		return this.melhoresPropostas;
+	}
+	
+	public void addPropostaRejeitadaPelaReputacao(Proposta proposta){
+		propostasRejeitadasPelaReputacao.add(proposta);
 	}
 	
 	public boolean validarReputacao(Reputacao reputacao){
@@ -85,5 +115,13 @@ public class AgenteIniciante extends AgenteContractNet {
 	
 	public Collection<Proposta> getPropostas(){
 		return propostas.values();
+	}
+	
+	public Collection<MelhorPropostaCupom> getMelhoresPropostas(){
+		return melhoresPropostas.values();
+	}
+	
+	public void addCupomNaoEncontrado(Cupom cupom){
+		cuponsNaoEncontrados.add(cupom);
 	}
 }

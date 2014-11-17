@@ -2,12 +2,12 @@ package br.ufc.quixada.smas.objetos;
 
 import jade.core.AID;
 
-public class MelhorProposta {
+public class MelhorPropostaCupom {
 
 	private Cupom cupom;
 	private AID vendedorAID;
 	
-	public MelhorProposta(Cupom cupom) {
+	public MelhorPropostaCupom(Cupom cupom) {
 		this.cupom = cupom;
 		this.vendedorAID = null;
 	}
@@ -26,5 +26,9 @@ public class MelhorProposta {
 	
 	public double getValor(){
 		return this.cupom.getValor();
+	}
+	
+	public Cupom getCupom(){
+		return cupom;
 	}
 }
