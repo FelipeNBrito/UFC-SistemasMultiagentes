@@ -1,10 +1,12 @@
 package br.ufc.quixada.smas.agentes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import br.ufc.quixada.smas.comportamento.BuscarSistemaDeReputacaoBehavior;
-import br.ufc.quixada.smas.comportamento.ReceberMensagemCFP;
+import br.ufc.quixada.smas.comportamento.participante.ReceberMensagensAgenteParticipante;
+import br.ufc.quixada.smas.objetos.ListaDeCupons;
+import br.ufc.quixada.smas.objetos.Reputacao;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -13,12 +15,16 @@ import jade.lang.acl.ACLMessage;
 
 public class AgenteParticipante extends AgenteContractNet{
 
-	private List<ACLMessage> mensagens;
-	private double MIN_REPUTACAO_ACEITACAO = 5.7;
+	private List<ACLMessage> mensagensCFP;
+	private ListaDeCupons cupons;
+	private List<ACLMessage> propostas;
+	
+	final private double MIN_REPUTACAO_ACEITACAO = 7.00;
 	
 	protected void setup(){
 		
-		mensagens = new ArrayList<ACLMessage>();
+		mensagensCFP = new ArrayList<ACLMessage>();
+		propostas = new ArrayList<ACLMessage>();
 		
 		// Criando uma entrada no DF 
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -38,8 +44,7 @@ public class AgenteParticipante extends AgenteContractNet{
 			e.printStackTrace();
 		}
 		
-		addBehaviour(new BuscarSistemaDeReputacaoBehavior(this));
-		addBehaviour(new ReceberMensagemCFP(this));
+		addBehaviour(new ReceberMensagensAgenteParticipante(this));
 		
 	}
 	
@@ -51,21 +56,31 @@ public class AgenteParticipante extends AgenteContractNet{
 			e.printStackTrace();
 		}
 	}
-	
-	public void addMensagem(ACLMessage mensagem){
-		this.mensagens.add(mensagem);
+
+	public void addProposta(ACLMessage mensagem){
+		this.addProposta(mensagem);
 	}
 	
-	public void removerMensagem(ACLMessage mensagem){
-		this.mensagens.remove(mensagem);
+	public Iterator<ACLMessage> getPropostas(){
+		return this.propostas.iterator();
 	}
 	
-	public ACLMessage pegarProximaMensagem(){
-		if(mensagens.size() > 0){
-			return mensagens.get(0);
-		}else{
+	public ACLMessage pegarProximaMensagemCFP(){
+		if(mensagensCFP.size() > 0){
+			ACLMessage mensagem = mensagensCFP.get(0);
+			mensagensCFP.remove(mensagem);
+			return mensagem;
+		}else {
 			return null;
 		}
+	}
+	
+	public void addMensagemCFP(ACLMessage mensagem){
+		this.mensagensCFP.add(mensagem);
+	}
+	
+	public ListaDeCupons getListaDeCupons(){
+		return this.cupons;
 	}
 	
 }

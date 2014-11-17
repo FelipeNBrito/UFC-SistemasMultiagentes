@@ -1,4 +1,6 @@
-package br.ufc.quixada.smas.comportamento;
+package br.ufc.quixada.smas.comportamento.iniciante;
+
+import java.util.Iterator;
 
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import jade.core.Agent;
@@ -10,7 +12,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class BuscarAgentesVendedores extends Behaviour{
 
-	final private long delay = 200;
+	final private long delay = 500;
 	private AgenteIniciante agente;
 	
 	public BuscarAgentesVendedores(AgenteIniciante agente) {

@@ -1,9 +1,9 @@
-package br.ufc.quixada.smas.comportamento;
+package br.ufc.quixada.smas.comportamento.iniciante;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 
-import br.ufc.quixada.smas.agentes.AgenteContractNet;
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
@@ -31,7 +31,13 @@ public class EnviarMensagemCFP extends Behaviour{
 			ACLMessage mensagem = new ACLMessage(ACLMessage.CFP);
 			mensagem.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 			mensagem.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
-			mensagem.setContent("conteudo");
+			
+			try {
+				mensagem.setContentObject(agente.getListaDeCupons());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			Iterator it = agente.getAgentesVendedores();
 			
@@ -39,10 +45,7 @@ public class EnviarMensagemCFP extends Behaviour{
 				mensagem.addReceiver( (AID) it.next());
 			}
 			
-			agente.addBehaviour(new ContractNetIniciatorBehavior(agente,mensagem));
-			
-			done = true;
-			
+			agente.send(mensagem); // Envia CFP para todos os agentes que fazem aquele servico
 		}
 	}
 

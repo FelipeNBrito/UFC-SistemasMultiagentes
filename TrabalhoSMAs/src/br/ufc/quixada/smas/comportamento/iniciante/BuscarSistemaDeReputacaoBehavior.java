@@ -1,4 +1,4 @@
-package br.ufc.quixada.smas.comportamento;
+package br.ufc.quixada.smas.comportamento.iniciante;
 
 import br.ufc.quixada.smas.agentes.AgenteContractNet;
 import jade.core.Agent;
