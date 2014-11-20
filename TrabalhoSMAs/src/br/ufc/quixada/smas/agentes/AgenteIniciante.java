@@ -13,7 +13,9 @@ import javax.swing.JTextField;
 import br.ufc.quixada.smas.comportamento.iniciante.AnalisarPropostas;
 import br.ufc.quixada.smas.comportamento.iniciante.BuscarAgentesVendedores;
 import br.ufc.quixada.smas.comportamento.iniciante.BuscarSistemaDeReputacaoBehavior;
+import br.ufc.quixada.smas.comportamento.iniciante.EnviarAcceptPropose;
 import br.ufc.quixada.smas.comportamento.iniciante.EnviarMensagemCFP;
+import br.ufc.quixada.smas.comportamento.iniciante.EnviarRefusePropose;
 import br.ufc.quixada.smas.comportamento.iniciante.PedirReputacaoDosAgentesPropostas;
 import br.ufc.quixada.smas.comportamento.iniciante.ReceberMensagemAgenteIniciante;
 import br.ufc.quixada.smas.objetos.Cupom;
@@ -28,36 +30,44 @@ import jade.lang.acl.ACLMessage;
 public class AgenteIniciante extends AgenteContractNet {
 	
 	private int passo = 0;
-	private boolean compraDeAgentesComReputacaoDesconhecida; // TODO: 
+	private boolean compraDeAgentesComReputacaoDesconhecida = true; // TODO: 
+	private boolean recebiReputacoes = false;
 	
 	private JanelaAgenteIniciante janela;
 	
 	private List<AID> agentesVendedores;
 	private ListaDeCupons cuponsDesejados; // Cupons que ele quer adquirir
 	private HashMap<AID, Proposta> propostas;
-	private ArrayList<Proposta> propostasRejeitadasPelaReputacao; // TODO : Inicializar
-	private HashMap<String,MelhorPropostaCupom> melhoresPropostas; // TODO : Iniciar com null
+	private ArrayList<Proposta> propostasRejeitadasPelaReputacao; 
+	private HashMap<String,MelhorPropostaCupom> melhoresPropostas;
 	// TODO :private List<Proposta> propostasRejetadas;
-	private List<Cupom> cuponsNaoEncontrados; //TODO : incializar
-	private ArrayList<MelhorPropostaCupom> propostasAceitas; // TODO : iniciar
-	private ArrayList<ListaDeCupons> cuponsASeremComprados; // TODO: iniciar
+	private List<Cupom> cuponsNaoEncontrados;
+	private ArrayList<MelhorPropostaCupom> propostasAceitas; 
+	private ArrayList<ListaDeCupons> cuponsASeremComprados; 
  	
 	
 	protected void setup(){
 		
 		criarJanela();
 		
+		cuponsNaoEncontrados = new ArrayList<Cupom>();
+		cuponsASeremComprados = new ArrayList<ListaDeCupons>();
+		propostasAceitas = new ArrayList<MelhorPropostaCupom>();
+		melhoresPropostas = new HashMap<String, MelhorPropostaCupom>();
+		propostasRejeitadasPelaReputacao = new ArrayList<Proposta>();
 		cuponsDesejados = new ListaDeCupons();
 		agentesVendedores = new ArrayList<AID>();
+		propostas = new HashMap<AID, Proposta>();
 		
 		
 		addBehaviour(new ReceberMensagemAgenteIniciante(this));
 		addBehaviour(new BuscarSistemaDeReputacaoBehavior(this));
 		addBehaviour(new BuscarAgentesVendedores(this));
-		//addBehaviour(new EnviarMensagemCFP(this));
-		//addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
-		//addBehaviour(new AnalisarPropostas(this));
-		
+		addBehaviour(new EnviarMensagemCFP(this));
+		addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
+		addBehaviour(new AnalisarPropostas(this));
+		addBehaviour(new EnviarAcceptPropose(this));
+		addBehaviour(new EnviarRefusePropose(this));
 		
 		//TODO : Receber resposta das CFPs
 		
@@ -65,6 +75,14 @@ public class AgenteIniciante extends AgenteContractNet {
 	
 	public void addCupomDesejado(String nome, double valor){
 		 this.cuponsDesejados.add(new Cupom(nome,valor));
+	}
+	
+	public boolean isRecebiReputacao(){
+		return this.recebiReputacoes;
+	}
+	
+	public void setRecebiReputacao(boolean valor){
+		this.recebiReputacoes = valor;
 	}
 	
 	public int getQuantidadeDeCuponsDesejados(){
@@ -103,8 +121,10 @@ public class AgenteIniciante extends AgenteContractNet {
 	}
 	
 	public boolean validarReputacao(Reputacao reputacao){
+		if(reputacao == null){
+			return this.compraDeAgentesComReputacaoDesconhecida;
+		}
 		return reputacao.getValor() >= 7.00;
-		//TODO: melhorar e ver caso em que nao ha reputacao
 	}
 	
 	public void addAgenteVendedor(AID agenteAID){
@@ -158,4 +178,11 @@ public class AgenteIniciante extends AgenteContractNet {
 	private void criarJanela(){
 		this.janela = new JanelaAgenteIniciante(this);
 	}
+	
+	/*public  void iniciarMapaMelhorProposta(){
+		this.melhoresPropostas = new HashMap<String, MelhorPropostaCupom>();
+		for(Cupom cupom : cuponsDesejados){
+			melhoresPropostas.put(cupom.toString(), null);
+		}
+	}*/
 }

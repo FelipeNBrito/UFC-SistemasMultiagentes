@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class RepositorioReputacaoAgente {
+	
+	public RepositorioReputacaoAgente(AID aid) {
+		reputacoes = new ArrayList<Integer>();
+		this.agenteID = aid;
+	}
 
 	private ArrayList<Integer> reputacoes;
 	private AID agenteID;

@@ -16,76 +16,83 @@ import jade.lang.acl.UnreadableException;
 public class AnalisarPropostas extends Behaviour{
 
 	private AgenteIniciante agente;
-	final private long delay = 30000;
 	private HashMap<String,MelhorPropostaCupom> melhoresPropostas;
+	private boolean done = false;
 	
 	public AnalisarPropostas(AgenteIniciante agente) {
 		this.agente = agente;
-		melhoresPropostas = agente.getHashMapMelhoresPropostas();
-		Iterator<Cupom> it = agente.getListaDeCupons().iterator();
-
-		while(it.hasNext()){
-			Cupom tmp = it.next();
-			melhoresPropostas.put(tmp.toString(), new MelhorPropostaCupom(it.next()));
-		}
+		
 	}
 	
 	@Override
 	public void action() {
-		block(delay);
-		
-		Iterator<Proposta> propostas = agente.getPropostas().iterator();
-		
-		while(propostas.hasNext()){
+
+		if(agente.getPasso() == 5 && agente.getPropostas().size() > 0 && agente.isRecebiReputacao()){
 			
-			Proposta proposta = propostas.next();
-			
-			if(!agente.validarReputacao(proposta.getReputacao())){ // se a reputacao nao for valida, ele continua com a proxima iteracao
-				continue;
+			melhoresPropostas = agente.getHashMapMelhoresPropostas();
+			Iterator<Cupom> it = agente.getListaDeCuponsDesejados().iterator();
+
+			while(it.hasNext()){
+				Cupom tmp = it.next();
+				melhoresPropostas.put(tmp.toString(), new MelhorPropostaCupom(tmp));
 			}
 			
-			try {
-				Iterator<Cupom> cuponsVendedor = proposta.getListaDeCupons().iterator();
+			System.out.println("Passo 5 AI");
+			Iterator<Proposta> propostas = agente.getPropostas().iterator();
+			
+			while(propostas.hasNext()){
 				
-				while(cuponsVendedor.hasNext()){
+				Proposta proposta = propostas.next();
+				
+				if(!agente.validarReputacao(proposta.getReputacao())){ // se a reputacao nao for valida, ele continua com a proxima iteracao
+					continue;
+				}
+				
+				try {
+					Iterator<Cupom> cuponsVendedor = proposta.getListaDeCupons().iterator();
 					
-					Iterator<Cupom> meusCupons = agente.getListaDeCupons().iterator();
-					
-					Cupom cupomVendedor = cuponsVendedor.next();
-					
-					while(meusCupons.hasNext()){
-						Cupom meuCupom = meusCupons.next();
+					while(cuponsVendedor.hasNext()){
 						
-						if(cupomVendedor.toString().equalsIgnoreCase(meuCupom.toString())){ // Se o cupom for o mesmo
+						Iterator<Cupom> meusCupons = agente.getListaDeCuponsDesejados().iterator();
+						
+						Cupom cupomVendedor = cuponsVendedor.next();
+						
+						while(meusCupons.hasNext()){
+							Cupom meuCupom = meusCupons.next();
 							
-							MelhorPropostaCupom melhorProposta = melhoresPropostas.get(meuCupom.toString());
-							
-							if(melhorProposta.getVendedorAID() == null){
-								melhorProposta = new MelhorPropostaCupom(cupomVendedor);
-								melhorProposta.setVendedorAID(proposta.getSender());
+							if(cupomVendedor.toString().equalsIgnoreCase(meuCupom.toString())){ // Se o cupom for o mesmo
 								
-								melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);
-							
-							}else if(cupomVendedor.getValor() < melhorProposta.getValor()){
-								melhorProposta.setVendedorAID(proposta.getSender());
-								melhorProposta.setCupom(cupomVendedor);
+								MelhorPropostaCupom melhorProposta = melhoresPropostas.get(meuCupom.toString());
 								
-								melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);
+								if(melhorProposta.getVendedorAID() == null){
+									melhorProposta = new MelhorPropostaCupom(cupomVendedor);
+									melhorProposta.setVendedorAID(proposta.getSender());
+									
+									melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);
+								
+								}else if(cupomVendedor.getValor() < melhorProposta.getValor()){
+									melhorProposta.setVendedorAID(proposta.getSender());
+									melhorProposta.setCupom(cupomVendedor);
+									
+									melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);
+								}
 							}
 						}
 					}
-				}
-			} catch (UnreadableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}  
-			
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  
+			}
+			done = true;
 		}
 	}
 
 	@Override
 	public boolean done() {
-		return true;
+		if(done)
+			agente.incrementaPasso();
+		return done;
 	}
 
 }

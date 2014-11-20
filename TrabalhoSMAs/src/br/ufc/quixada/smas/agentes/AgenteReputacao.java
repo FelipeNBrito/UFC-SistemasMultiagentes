@@ -16,10 +16,18 @@ public class AgenteReputacao extends Agent{
 
 	private Map<AID, RepositorioReputacaoAgente> reputacoes;
 	
+	public AgenteReputacao() {
+		reputacoes = new HashMap<AID, RepositorioReputacaoAgente>();
+	}
+	
 	public RepositorioReputacaoAgente getRepositorioReputacao(AID agenteAid){
+		RepositorioReputacaoAgente repositorio = reputacoes.get(agenteAid);
 		
-		return reputacoes.get(agenteAid);
-		
+		if(repositorio == null){
+			repositorio = new RepositorioReputacaoAgente(agenteAid);
+			reputacoes.put(agenteAid, repositorio);
+		}
+		return repositorio;
 	}
 	
 	protected void setup(){

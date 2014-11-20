@@ -24,9 +24,14 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 		
 		if(mensagem != null){
 			
-			if(mensagem.getProtocol().equals(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET)){
+			
+			
+			if(mensagem.getProtocol() != null && mensagem.getProtocol().equals(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET)){
+				
+				System.out.println("Recebi uma mensagem " +  mensagem.getProtocol());
 				
 				if(mensagem.getPerformative() == ACLMessage.PROPOSE){
+					System.out.println("Recebi uma mensagem " +  mensagem.getPerformative());
 					Proposta proposta = new Proposta(mensagem);
 					agente.addProposta(proposta);
 				} else if(mensagem.getPerformative() == ACLMessage.INFORM){
@@ -42,6 +47,8 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 				
 				try {
 					
+					System.out.println("Recebi uma Reputacao, vou atualizar");
+					agente.setRecebiReputacao(true);
 					reputacao = (Reputacao) mensagem.getContentObject();
 					Proposta proposta = agente.getProposta(reputacao.getAidAgente());
 					proposta.setReputacao(reputacao);

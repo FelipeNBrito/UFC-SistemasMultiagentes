@@ -13,7 +13,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class BuscarSistemaDeReputacaoBehavior extends Behaviour{
 	
 	private AgenteIniciante agente;
-	private long delay = 9000000;
 	
 	public BuscarSistemaDeReputacaoBehavior(AgenteIniciante agente) {
 		this.agente = agente;
@@ -22,8 +21,6 @@ public class BuscarSistemaDeReputacaoBehavior extends Behaviour{
 	@Override
 	public void action() {
 		
-			block(delay);
-			
 			if(agente.getPasso() == 1){
 			
 		
@@ -37,7 +34,7 @@ public class BuscarSistemaDeReputacaoBehavior extends Behaviour{
 			
 				try {
 					DFAgentDescription[] result = DFService.search((Agent) agente, template);
-					System.out.println(result.length);
+					System.out.println(result.length + "BSDR");
 					if( result.length > 0 && result[0].getName() != null){
 						agente.setSistemaDeReputacaoAID(result[0].getName());
 					}

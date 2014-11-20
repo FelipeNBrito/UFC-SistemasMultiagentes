@@ -11,8 +11,8 @@ import jade.lang.acl.ACLMessage;
 
 public class PedirReputacaoDosAgentesPropostas extends Behaviour{
 
-	final private long delay = 20000;
 	private AgenteIniciante agente;
+	private boolean done = false;
 	
 	public PedirReputacaoDosAgentesPropostas(AgenteIniciante agente) {
 		this.agente = agente;
@@ -20,32 +20,69 @@ public class PedirReputacaoDosAgentesPropostas extends Behaviour{
 	
 	@Override
 	public void action() {
-		block(delay);
+
 		
-		Collection<Proposta> propostas = agente.getPropostas();
+		if(agente.getPasso() == 4){
 		
-		Iterator<Proposta> it =  propostas.iterator();
-		
-		while(it.hasNext()){
-			ACLMessage mensagem = new ACLMessage(ACLMessage.REQUEST);
-			mensagem.addReceiver(agente.getSistemaDeReputacaoAID());
+			if(agente.getPropostas().size() > 0){
+				esperarMuito();
+				esperarMuito();
+				esperarMuito();
+				esperarMuito();
 			
-			try {
+			
+				System.out.println("Passo 4");
 				
-				mensagem.setContentObject(it.next().getSender());
-				agente.send(mensagem);
+				Collection<Proposta> propostas = agente.getPropostas();
 				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				System.out.println(propostas.size());
+				Iterator<Proposta> it =  propostas.iterator();
+				
+				
+				while(it.hasNext()){
+					ACLMessage mensagem = new ACLMessage(ACLMessage.REQUEST);
+					mensagem.addReceiver(agente.getSistemaDeReputacaoAID());
+					
+					try {
+						Proposta proposta = it.next();
+						System.out.println("Vou pedir a reputacao do " + proposta.getSender().getLocalName());
+						mensagem.setContentObject(proposta.getSender());
+						agente.send(mensagem);
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				System.out.println("Passo 4");
+				done = true;
+			}	
 		}
 		
 	}
 
 	@Override
 	public boolean done() {
-		return true;
+		if(done)
+			agente.incrementaPasso();
+		return done;
+	}
+	
+	private void esperarMuito(){
+		esperar();
+		esperar();
+		esperar();
+		esperar();
+		esperar();
+		esperar();
+	}
+	private void esperar(){
+		for(int i = 0; i < 999999999; i++);
+		for(int i = 0; i < 999999999; i++);
+		for(int i = 0; i < 999999999; i++);
+		for(int i = 0; i < 999999999; i++);
+		for(int i = 0; i < 999999999; i++);
+		for(int i = 0; i < 999999999; i++);
 	}
 
 }

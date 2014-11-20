@@ -12,18 +12,18 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class BuscarAgentesVendedores extends Behaviour{
 
-	final private long delay = 500;
 	private AgenteIniciante agente;
-	
+	private boolean done = false;
 	public BuscarAgentesVendedores(AgenteIniciante agente) {
 		this.agente = agente;
 	}
 	
 	@Override
 	public void action() {
-		block(delay);
-		
 		if(agente.getPasso() == 2){
+			System.out.println("Passo 2 AI");
+			
+			//agente.iniciarMapaMelhorProposta();
 		
 			DFAgentDescription template = new DFAgentDescription();
 			ServiceDescription sd = new ServiceDescription();
@@ -34,7 +34,7 @@ public class BuscarAgentesVendedores extends Behaviour{
 				DFAgentDescription[] result = DFService.search(agente, template);
 				
 				for(int i = 0; i < result.length; i++){
-					//System.out.println(result[i].getName());
+					System.out.println("Vendedor: " + result[i].getName());
 					agente.addAgenteVendedor(result[i].getName());
 				}
 				
@@ -42,13 +42,17 @@ public class BuscarAgentesVendedores extends Behaviour{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			done = true;
 		}
+		
 	}
 
 	@Override
 	public boolean done() {
-		agente.incrementaPasso();
-		return true;
+		if(done){
+			agente.incrementaPasso();
+		}
+		return done;
 	}
 
 }

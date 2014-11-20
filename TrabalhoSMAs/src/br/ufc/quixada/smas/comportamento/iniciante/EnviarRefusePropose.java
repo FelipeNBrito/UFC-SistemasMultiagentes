@@ -15,55 +15,62 @@ import jade.lang.acl.ACLMessage;
 public class EnviarRefusePropose extends Behaviour{
 
 	private AgenteIniciante agente;
+	private boolean done = false;
 	
-	public EnviarRefusePropose() {
+	public EnviarRefusePropose(AgenteIniciante agente) {
 		this.agente = agente;
 	}
 	
 	@Override
 	public void action() {
-		// TODO delay e passos
-		
-		ArrayList<AID> agentesRejeitados = new ArrayList<AID>();
-		
-		ArrayList<Proposta> propostasRecusadasPelaReputacao = agente.getPropostasRejeitadasPelaReputacao();
-		
-		for(Proposta proposta : propostasRecusadasPelaReputacao){
-			agentesRejeitados.add(proposta.getSender());
-		}
-		
-		Iterator<Proposta> it = agente.getPropostas().iterator();
-		ArrayList<ListaDeCupons> cuponsASeremComprados = agente.getCuponsASeremComprados();
-		
-		while(it.hasNext()){
-			AID tmpAID = it.next().getSender();
-			boolean flag = false;
+
+		if(agente.getPasso() == 7){
 			
-			for(ListaDeCupons lista : cuponsASeremComprados){
-				if(lista.getAID().equals(tmpAID)){
-					flag = true;
-					break;
+			System.out.println("Passo 7 AI");
+			ArrayList<AID> agentesRejeitados = new ArrayList<AID>();
+			
+			ArrayList<Proposta> propostasRecusadasPelaReputacao = agente.getPropostasRejeitadasPelaReputacao();
+			
+			for(Proposta proposta : propostasRecusadasPelaReputacao){
+				agentesRejeitados.add(proposta.getSender());
+			}
+			
+			Iterator<Proposta> it = agente.getPropostas().iterator();
+			ArrayList<ListaDeCupons> cuponsASeremComprados = agente.getCuponsASeremComprados();
+			
+			while(it.hasNext()){
+				AID tmpAID = it.next().getSender();
+				boolean flag = false;
+				
+				for(ListaDeCupons lista : cuponsASeremComprados){
+					if(lista.getAID().equals(tmpAID)){
+						flag = true;
+						break;
+					}
+				}
+				if(!flag){
+					agentesRejeitados.add(tmpAID);
 				}
 			}
-			if(!flag){
-				agentesRejeitados.add(tmpAID);
+			
+			ACLMessage mensagem = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
+			mensagem.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
+			
+			for(AID aid : agentesRejeitados){
+				mensagem.addReceiver(aid);
 			}
+			
+			agente.send(mensagem);
+			
+			done = true;
 		}
-		
-		ACLMessage mensagem = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
-		mensagem.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-		
-		for(AID aid : agentesRejeitados){
-			mensagem.addReceiver(aid);
-		}
-		
-		agente.send(mensagem);
 	}
 
 	@Override
 	public boolean done() {
-		// TODO Auto-generated method stub
-		return false;
+		if(done)
+			agente.incrementaPasso();
+		return done;
 	}
 
 }

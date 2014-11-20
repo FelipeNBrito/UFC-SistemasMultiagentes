@@ -17,7 +17,6 @@ import jade.lang.acl.UnreadableException;
 
 public class TratarMensagemCFP extends Behaviour{
 	
-	private final long delay = 2000;
 	private AgenteParticipante agente;
 	
 	
@@ -27,7 +26,7 @@ public class TratarMensagemCFP extends Behaviour{
 	
 	@Override
 	public void action() {
-		block(delay);
+		
 		
 		ACLMessage cfp = agente.pegarProximaMensagemCFP();
 		ListaDeCupons cuponsEmComum = new ListaDeCupons();
@@ -50,9 +49,11 @@ public class TratarMensagemCFP extends Behaviour{
 				ACLMessage resposta = cfp.createReply();
 				
 				if(cuponsEmComum.size() > 0){
+					System.out.println("Temos Cupons em comum");
 					resposta.setPerformative(ACLMessage.PROPOSE);
 					resposta.setContentObject(cuponsEmComum);
 				}else{
+					System.out.println("NAOOOOO Temos Cupons em comum");
 					resposta.setPerformative(ACLMessage.REFUSE);
 				}
 				

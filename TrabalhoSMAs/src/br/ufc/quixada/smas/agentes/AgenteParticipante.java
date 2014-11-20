@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import br.ufc.quixada.smas.comportamento.participante.ReceberMensagensAgenteParticipante;
+import br.ufc.quixada.smas.comportamento.participante.TratarMensagemCFP;
 import br.ufc.quixada.smas.objetos.Cupom;
 import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.Reputacao;
@@ -24,7 +25,7 @@ public class AgenteParticipante extends AgenteContractNet{
 	private List<ACLMessage> propostas;
 	private JFrame janela;
 	
-	private int passo;
+	private int passo = 0;
 	
 	private int probabilidadeDeAcerto; //TODO
 	
@@ -55,6 +56,7 @@ public class AgenteParticipante extends AgenteContractNet{
 		}
 		
 		addBehaviour(new ReceberMensagensAgenteParticipante(this));
+		addBehaviour(new TratarMensagemCFP(this));
 		
 	}
 	

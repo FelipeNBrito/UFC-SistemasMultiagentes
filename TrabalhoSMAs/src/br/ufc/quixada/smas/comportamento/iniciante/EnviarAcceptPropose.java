@@ -12,6 +12,7 @@ import jade.lang.acl.ACLMessage;
 public class EnviarAcceptPropose extends Behaviour {
 
 	private AgenteIniciante agente;
+	private boolean done = false;
 	
 	public EnviarAcceptPropose(AgenteIniciante agente) {
 		this.agente = agente;
@@ -19,31 +20,35 @@ public class EnviarAcceptPropose extends Behaviour {
 	
 	@Override
 	public void action() {
-		// TODO delay e passos
-		
-		Iterator<ListaDeCupons> it = agente.getCuponsASeremComprados().iterator();
-		
-		while(it.hasNext()){
-			ListaDeCupons lista = it.next();
+
+		if(agente.getPasso() == 6){
+			System.out.println("Passo 6 AI");
+			Iterator<ListaDeCupons> it = agente.getCuponsASeremComprados().iterator();
 			
-			ACLMessage mensagem = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-			mensagem.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-			mensagem.addReceiver(lista.getAID());
-			try {
-				mensagem.setContentObject(lista);
-				agente.send(mensagem);
+			while(it.hasNext()){
+				ListaDeCupons lista = it.next();
 				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ACLMessage mensagem = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+				mensagem.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
+				mensagem.addReceiver(lista.getAID());
+				try {
+					mensagem.setContentObject(lista);
+					agente.send(mensagem);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			done = true;
 		}
 	}
 
 	@Override
 	public boolean done() {
-		// TODO Auto-generated method stub
-		return false;
+		if(done)
+			agente.incrementaPasso();
+		return done;
 	}
 
 }

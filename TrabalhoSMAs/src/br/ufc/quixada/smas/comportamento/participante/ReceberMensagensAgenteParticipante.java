@@ -26,8 +26,10 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 		
 		ACLMessage mensagem = agente.receive();
 		
+		
+		
 		if(mensagem != null){
-			
+			System.out.println("Recebi mensagem AP");
 			// Se o protocolo for FIPA CONSTRACT NET
 			if(mensagem.getProtocol().equals(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET)){
 				// SE for do tipo CFP
@@ -39,7 +41,7 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 					Random rand = new Random();
 					ACLMessage resposta = mensagem.createReply();
 					
-					if(rand.nextInt(9) >= agente.getProbabilidadeDeAcerto()){
+					if(/*rand.nextInt(9) >= agente.getProbabilidadeDeAcerto()*/true){
 						resposta.setPerformative(ACLMessage.INFORM);
 						
 						try {
