@@ -1,6 +1,7 @@
 package br.ufc.quixada.smas.comportamento.iniciante;
 
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
+import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.Proposta;
 import br.ufc.quixada.smas.objetos.Reputacao;
 import jade.core.behaviours.Behaviour;
@@ -35,7 +36,12 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 					Proposta proposta = new Proposta(mensagem);
 					agente.addProposta(proposta);
 				} else if(mensagem.getPerformative() == ACLMessage.INFORM){
-					
+					try {
+						agente.addCupomCompradoComSucesso((ListaDeCupons) mensagem.getContentObject());
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(mensagem.getPerformative() == ACLMessage.FAILURE){
 					
 				}

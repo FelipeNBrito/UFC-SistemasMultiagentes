@@ -38,8 +38,10 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 					agente.addMensagemCFP(mensagem);
 				}else if(mensagem.getPerformative() == ACLMessage.ACCEPT_PROPOSAL){
 					
+					System.out.println("ACLMessage.ACCEPT_PROPOSAL");
 					Random rand = new Random();
 					ACLMessage resposta = mensagem.createReply();
+					resposta.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 					
 					if(/*rand.nextInt(9) >= agente.getProbabilidadeDeAcerto()*/true){
 						resposta.setPerformative(ACLMessage.INFORM);

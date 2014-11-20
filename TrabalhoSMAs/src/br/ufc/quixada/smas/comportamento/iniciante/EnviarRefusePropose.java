@@ -24,9 +24,9 @@ public class EnviarRefusePropose extends Behaviour{
 	@Override
 	public void action() {
 
-		if(agente.getPasso() == 7){
+		if(agente.getPasso() == 8){
 			
-			System.out.println("Passo 7 AI");
+			System.out.println("Passo 8 AI");
 			ArrayList<AID> agentesRejeitados = new ArrayList<AID>();
 			
 			ArrayList<Proposta> propostasRecusadasPelaReputacao = agente.getPropostasRejeitadasPelaReputacao();

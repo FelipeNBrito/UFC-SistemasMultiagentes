@@ -41,13 +41,13 @@ public class AnalisarPropostas extends Behaviour{
 			Iterator<Proposta> propostas = agente.getPropostas().iterator();
 			
 			while(propostas.hasNext()){
-				
+				System.out.println("Passo 5 AI WHILE");
 				Proposta proposta = propostas.next();
-				
+				System.out.println(agente.validarReputacao(proposta.getReputacao()));
 				if(!agente.validarReputacao(proposta.getReputacao())){ // se a reputacao nao for valida, ele continua com a proxima iteracao
 					continue;
 				}
-				
+				System.out.println("Passo 5 AI WHILE");
 				try {
 					Iterator<Cupom> cuponsVendedor = proposta.getListaDeCupons().iterator();
 					
@@ -66,6 +66,7 @@ public class AnalisarPropostas extends Behaviour{
 								
 								if(melhorProposta.getVendedorAID() == null){
 									melhorProposta = new MelhorPropostaCupom(cupomVendedor);
+									System.out.println("ASASSA" + proposta.getSender());
 									melhorProposta.setVendedorAID(proposta.getSender());
 									
 									melhoresPropostas.put(cupomVendedor.toString(), melhorProposta);
@@ -90,8 +91,10 @@ public class AnalisarPropostas extends Behaviour{
 
 	@Override
 	public boolean done() {
-		if(done)
+		if(done){
 			agente.incrementaPasso();
+			System.out.println("FIM do PASSO 5 " + agente.getPasso() );
+		}
 		return done;
 	}
 

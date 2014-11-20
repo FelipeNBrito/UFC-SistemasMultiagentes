@@ -12,45 +12,57 @@ import jade.core.behaviours.Behaviour;
 public class TratarPropostas extends Behaviour{
 
 	private AgenteIniciante agente;
+	private boolean done = false;
 	
 	
-	public TratarPropostas() {
+	public TratarPropostas(AgenteIniciante agente) {
 		this.agente = agente;
 	}
 	
 	@Override
 	public void action() {
-		// TODO DELAY E PASSO
 		
-		ArrayList<MelhorPropostaCupom> propostasAceitas =  agente.getPropostasAceitas();
-		ArrayList<MelhorPropostaCupom> propostasOrdenadas = ordenarPropostas((ArrayList<MelhorPropostaCupom>)propostasAceitas.clone());
+		if(agente.getPasso() == 6){
 		
-		while(propostasOrdenadas.size() > 0){
-			
-			ListaDeCupons listaDeCupons = new ListaDeCupons();
-			MelhorPropostaCupom melhorPropostaCupom = propostasOrdenadas.get(0);
-			AID aid = melhorPropostaCupom.getVendedorAID();
-			listaDeCupons.setAid(aid);
-			listaDeCupons.add(melhorPropostaCupom.getCupom());
-			
-			
-			propostasOrdenadas.remove(melhorPropostaCupom);
-			
-			while(propostasOrdenadas.size() > 0 && 
-					propostasOrdenadas.get(0).getVendedorAID().equals(aid)){
-				
-				listaDeCupons.add(propostasOrdenadas.get(0).getCupom());
-				propostasOrdenadas.remove(0);
+			Iterator<MelhorPropostaCupom> melhoresPropostas = agente.getMelhoresPropostas().iterator();
+			while(melhoresPropostas.hasNext()){
+				agente.addPropostaAceita(melhoresPropostas.next());
 			}
-			agente.addCuponsASeremComprados(listaDeCupons);
+			
+			System.out.println("PASSO 6 AI");
+			ArrayList<MelhorPropostaCupom> propostasAceitas =  agente.getPropostasAceitas();
+			System.out.println(propostasAceitas.size());
+			ArrayList<MelhorPropostaCupom> propostasOrdenadas = ordenarPropostas((ArrayList<MelhorPropostaCupom>)propostasAceitas.clone());
+			
+			while(propostasOrdenadas.size() > 0){
+				
+				ListaDeCupons listaDeCupons = new ListaDeCupons();
+				MelhorPropostaCupom melhorPropostaCupom = propostasOrdenadas.get(0);
+				AID aid = melhorPropostaCupom.getVendedorAID();
+				listaDeCupons.setAid(aid);
+				listaDeCupons.add(melhorPropostaCupom.getCupom());
+				
+				
+				propostasOrdenadas.remove(melhorPropostaCupom);
+				
+				while(propostasOrdenadas.size() > 0 && 
+						propostasOrdenadas.get(0).getVendedorAID().equals(aid)){
+					
+					listaDeCupons.add(propostasOrdenadas.get(0).getCupom());
+					propostasOrdenadas.remove(0);
+				}
+				agente.addCuponsASeremComprados(listaDeCupons);
+			}
+			done = true;
 		}
 		
 	}
 
 	@Override
 	public boolean done() {
-		// TODO Auto-generated method stub
-		return false;
+		if(done)
+			agente.incrementaPasso();
+		return done;
 	}
 	
 	private ArrayList<MelhorPropostaCupom> ordenarPropostas(ArrayList<MelhorPropostaCupom> propostasAceitas){
@@ -69,6 +81,7 @@ public class TratarPropostas extends Behaviour{
 			while(it.hasNext()){
 				MelhorPropostaCupom tmp = it.next();
 				
+				System.out.println(menorAID.toString());
 				if(tmp.getVendedorAID().toString().compareTo(menorAID.toString()) < 0){
 					melhorProposta = tmp;
 					menorAID = tmp.getVendedorAID();

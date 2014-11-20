@@ -21,8 +21,8 @@ public class EnviarAcceptPropose extends Behaviour {
 	@Override
 	public void action() {
 
-		if(agente.getPasso() == 6){
-			System.out.println("Passo 6 AI");
+		if(agente.getPasso() == 7){
+			System.out.println("Passo 7 AI - " );
 			Iterator<ListaDeCupons> it = agente.getCuponsASeremComprados().iterator();
 			
 			while(it.hasNext()){

@@ -12,6 +12,7 @@ import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.Reputacao;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
@@ -47,6 +48,7 @@ public class TratarMensagemCFP extends Behaviour{
 				}
 				
 				ACLMessage resposta = cfp.createReply();
+				resposta.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 				
 				if(cuponsEmComum.size() > 0){
 					System.out.println("Temos Cupons em comum");
@@ -66,8 +68,6 @@ public class TratarMensagemCFP extends Behaviour{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			
 		}
 	}
 

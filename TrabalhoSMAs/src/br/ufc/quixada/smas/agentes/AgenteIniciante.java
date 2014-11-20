@@ -16,8 +16,10 @@ import br.ufc.quixada.smas.comportamento.iniciante.BuscarSistemaDeReputacaoBehav
 import br.ufc.quixada.smas.comportamento.iniciante.EnviarAcceptPropose;
 import br.ufc.quixada.smas.comportamento.iniciante.EnviarMensagemCFP;
 import br.ufc.quixada.smas.comportamento.iniciante.EnviarRefusePropose;
+import br.ufc.quixada.smas.comportamento.iniciante.FinalizarAgente;
 import br.ufc.quixada.smas.comportamento.iniciante.PedirReputacaoDosAgentesPropostas;
 import br.ufc.quixada.smas.comportamento.iniciante.ReceberMensagemAgenteIniciante;
+import br.ufc.quixada.smas.comportamento.iniciante.TratarPropostas;
 import br.ufc.quixada.smas.objetos.Cupom;
 import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.MelhorPropostaCupom;
@@ -34,6 +36,8 @@ public class AgenteIniciante extends AgenteContractNet {
 	private boolean recebiReputacoes = false;
 	
 	private JanelaAgenteIniciante janela;
+	
+	private ArrayList<ListaDeCupons> cuponsCompradosComSucesso;
 	
 	private List<AID> agentesVendedores;
 	private ListaDeCupons cuponsDesejados; // Cupons que ele quer adquirir
@@ -58,6 +62,7 @@ public class AgenteIniciante extends AgenteContractNet {
 		cuponsDesejados = new ListaDeCupons();
 		agentesVendedores = new ArrayList<AID>();
 		propostas = new HashMap<AID, Proposta>();
+		cuponsCompradosComSucesso = new ArrayList<ListaDeCupons>();
 		
 		
 		addBehaviour(new ReceberMensagemAgenteIniciante(this));
@@ -66,11 +71,19 @@ public class AgenteIniciante extends AgenteContractNet {
 		addBehaviour(new EnviarMensagemCFP(this));
 		addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
 		addBehaviour(new AnalisarPropostas(this));
+		addBehaviour(new TratarPropostas(this));
 		addBehaviour(new EnviarAcceptPropose(this));
 		addBehaviour(new EnviarRefusePropose(this));
+		addBehaviour(new FinalizarAgente(this));
 		
-		//TODO : Receber resposta das CFPs
-		
+	}
+	
+	public void addCupomCompradoComSucesso(ListaDeCupons lista){
+		this.cuponsCompradosComSucesso.add(lista);
+	}
+	
+	public ArrayList<ListaDeCupons> getCuponsCompradosComSucesso(){
+		return this.cuponsCompradosComSucesso;
 	}
 	
 	public void addCupomDesejado(String nome, double valor){
@@ -79,6 +92,10 @@ public class AgenteIniciante extends AgenteContractNet {
 	
 	public boolean isRecebiReputacao(){
 		return this.recebiReputacoes;
+	}
+	
+	public void addCuponsASeremComprados(Cupom cupom){
+		
 	}
 	
 	public void setRecebiReputacao(boolean valor){
@@ -121,7 +138,7 @@ public class AgenteIniciante extends AgenteContractNet {
 	}
 	
 	public boolean validarReputacao(Reputacao reputacao){
-		if(reputacao == null){
+		if(reputacao.getValor() == -1){
 			return this.compraDeAgentesComReputacaoDesconhecida;
 		}
 		return reputacao.getValor() >= 7.00;
