@@ -27,7 +27,7 @@ public class AgenteParticipante extends AgenteContractNet{
 	
 	private int passo = 0;
 	
-	private int probabilidadeDeAcerto; //TODO
+	private int probabilidadeDeAcerto = 8;
 	
 	protected void setup(){
 		

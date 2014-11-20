@@ -81,8 +81,7 @@ public class TratarPropostas extends Behaviour{
 			while(it.hasNext()){
 				MelhorPropostaCupom tmp = it.next();
 				
-				System.out.println(menorAID.toString());
-				if(tmp.getVendedorAID().toString().compareTo(menorAID.toString()) < 0){
+				if(/*menorAID != null && */tmp.getVendedorAID().toString().compareTo(menorAID.toString()) < 0){
 					melhorProposta = tmp;
 					menorAID = tmp.getVendedorAID();
 				}

@@ -33,10 +33,6 @@ public class PedirReputacaoDosAgentesPropostas extends Behaviour{
 			}
 			
 			if(agente.getPropostas().size() > 0 && agente.getPropostas().size() == cont){
-				//esperarMuito();
-				//esperarMuito();
-				//esperarMuito();
-				//esperarMuito();
 			
 			
 				System.out.println("Passo 4");
@@ -75,22 +71,4 @@ public class PedirReputacaoDosAgentesPropostas extends Behaviour{
 			agente.incrementaPasso();
 		return done;
 	}
-	
-	private void esperarMuito(){
-		esperar();
-		esperar();
-		esperar();
-		esperar();
-		esperar();
-		esperar();
-	}
-	private void esperar(){
-		for(int i = 0; i < 999999999; i++);
-		for(int i = 0; i < 999999999; i++);
-		for(int i = 0; i < 999999999; i++);
-		for(int i = 0; i < 999999999; i++);
-		for(int i = 0; i < 999999999; i++);
-		for(int i = 0; i < 999999999; i++);
-	}
-
 }

@@ -205,21 +205,27 @@ public class AgenteIniciante extends AgenteContractNet {
 		this.janela = new JanelaAgenteIniciante(this);
 	}
 	
-	/*public  void iniciarMapaMelhorProposta(){
-		this.melhoresPropostas = new HashMap<String, MelhorPropostaCupom>();
-		for(Cupom cupom : cuponsDesejados){
-			melhoresPropostas.put(cupom.toString(), null);
-		}
-	}*/
-	
 	public void verResultados(){
+		//ArrayList<Cupom> desejados = (ArrayList<Cupom>) this.getListaDeCuponsDesejados().clone();
+		
+		System.out.println("**********************************************************************");
 		for(ListaDeCupons lista : this.getCuponsCompradosComSucesso()){
 			for(Cupom cupom : lista){
+				/*for(Cupom tmp : desejados){
+					if(tmp.toString().equals(cupom.toString())){
+						desejados.remove(tmp);
+					}
+				}*/
 				System.out.println("***************************************");
 				System.out.println("Comprei o cupom : " + cupom.toString());
 				System.out.println("Do agente : " + lista.getAID().getName());
 				System.out.println("Pelo valor de : R$" + cupom.getValor());
 			}
 		}
+		
+		/*for(Cupom cupom : desejados){
+			System.out.println("***************************************");
+			System.out.println("Nao consegui comprar o cupom : " + cupom.toString());
+		}*/
 	}
 }

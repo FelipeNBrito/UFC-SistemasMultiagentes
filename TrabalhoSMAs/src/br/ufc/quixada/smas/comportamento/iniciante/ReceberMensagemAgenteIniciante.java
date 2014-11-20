@@ -58,6 +58,7 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 					
 					Reputacao reputacao = new Reputacao(mensagem.getSender(),0);
 					ACLMessage salvarReputacao = new ACLMessage(ACLMessage.INFORM);
+					System.out.println("O agente : " + mensagem.getSender().getLocalName() + "falou ao me enviar meu pedido.");
 					try {
 						salvarReputacao.setContentObject(reputacao);
 					} catch (IOException e) {

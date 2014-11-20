@@ -25,6 +25,7 @@ public class RepositorioReputacaoAgente {
 	
 	public Reputacao pegarReputacao(){
 		
+		System.out.println(reputacoes.size());
 		if(reputacoes.size() < 5){ // Ainda nao tem iteracoes suficientes
 			return null;
 		}

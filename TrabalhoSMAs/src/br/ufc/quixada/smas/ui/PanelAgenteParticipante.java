@@ -61,13 +61,7 @@ public class PanelAgenteParticipante extends JPanel implements ActionListener {
 		 if(e.getSource()==this.botaoAddCupom){
 			 this.agente.addCupom(textoCupomNome.getText(),Double.parseDouble(textoCupomPreco.getText()));
 		      JOptionPane.showMessageDialog(null,agente.getQuantidadeDeCupons());
-		     /* String cuponsDes = "";
-		      for(Cupom cupom : agente.getListaDeCuponsDesejados()){
-		    	  cuponsDes += cupom.toString() + "\n";
-		      }
-		     labelCuponsAdicionados.setText(cuponsDes);*/
 		 } else if(e.getSource()==this.botaoFinalizar){
-			 JOptionPane.showMessageDialog(null,"asas");
 			 agente.incrementaPasso();
 			 this.botaoAddCupom.setEnabled(false);
 		 }

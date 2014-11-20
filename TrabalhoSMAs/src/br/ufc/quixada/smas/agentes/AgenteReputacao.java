@@ -1,11 +1,16 @@
 package br.ufc.quixada.smas.agentes;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JFrame;
 
 import br.ufc.quixada.smas.comportamento.agentedereputacao.EsperarReputacaoCyclicBehavior;
 import br.ufc.quixada.smas.objetos.RepositorioReputacaoAgente;
 import br.ufc.quixada.smas.objetos.Reputacao;
+import br.ufc.quixada.smas.ui.JanelaAgenteReputacao;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -16,9 +21,11 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class AgenteReputacao extends Agent{
 
 	private Map<AID, RepositorioReputacaoAgente> reputacoes;
+	private JFrame janela;
 	
 	public AgenteReputacao() {
 		reputacoes = new HashMap<AID, RepositorioReputacaoAgente>();
+		janela = new JanelaAgenteReputacao(this);
 	}
 	
 	public RepositorioReputacaoAgente getRepositorioReputacao(AID agenteAid){
@@ -32,7 +39,7 @@ public class AgenteReputacao extends Agent{
 	}
 	
 	public void addReputacao(Reputacao reputacao){
-		RepositorioReputacaoAgente repositorio = reputacoes.get(reputacao.getAidAgente());
+		RepositorioReputacaoAgente repositorio = getRepositorioReputacao(reputacao.getAidAgente());
 		repositorio.adicionarReputacao((int) reputacao.getValor());
 		reputacoes.put(reputacao.getAidAgente(), repositorio);
 		
@@ -72,4 +79,12 @@ public class AgenteReputacao extends Agent{
 			e.printStackTrace();
 		}
 	}	
+	
+	public ArrayList<Reputacao> getTodasReputacoes(){
+		ArrayList<Reputacao> reputacao = new ArrayList<Reputacao>();
+		for(RepositorioReputacaoAgente repositorio : reputacoes.values()){
+			reputacao.add(repositorio.pegarReputacao());
+		}
+		return reputacao;
+	}
 }

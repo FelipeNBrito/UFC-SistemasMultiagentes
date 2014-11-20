@@ -43,7 +43,7 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 					ACLMessage resposta = mensagem.createReply();
 					resposta.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 					
-					if(/*rand.nextInt(9) >= agente.getProbabilidadeDeAcerto()*/true){
+					if(rand.nextInt(9) <= agente.getProbabilidadeDeAcerto()){
 						resposta.setPerformative(ACLMessage.INFORM);
 						
 						try {
@@ -55,6 +55,12 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 						}
 					} else{
 						resposta.setPerformative(ACLMessage.FAILURE);
+						try {
+							resposta.setContentObject(mensagem.getContentObject());
+						} catch (IOException | UnreadableException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						agente.send(resposta);
 					}
 				}else if(mensagem.getPerformative() == ACLMessage.REJECT_PROPOSAL){
