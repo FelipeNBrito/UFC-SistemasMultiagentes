@@ -58,7 +58,7 @@ public class ReceberMensagensAgenteParticipante extends Behaviour{
 						agente.send(resposta);
 					}
 				}else if(mensagem.getPerformative() == ACLMessage.REJECT_PROPOSAL){
-					//TODO :
+					System.out.println("Minha proposta foi rejeitada" + agente.getLocalName());
 				}
 			} else{
 				block();

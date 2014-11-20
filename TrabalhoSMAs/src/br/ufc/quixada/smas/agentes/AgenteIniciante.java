@@ -34,6 +34,7 @@ public class AgenteIniciante extends AgenteContractNet {
 	private int passo = 0;
 	private boolean compraDeAgentesComReputacaoDesconhecida = true; // TODO: 
 	private boolean recebiReputacoes = false;
+	private int qtdReputacoesRecebidas = 0;
 	
 	private JanelaAgenteIniciante janela;
 	
@@ -74,8 +75,16 @@ public class AgenteIniciante extends AgenteContractNet {
 		addBehaviour(new TratarPropostas(this));
 		addBehaviour(new EnviarAcceptPropose(this));
 		addBehaviour(new EnviarRefusePropose(this));
-		addBehaviour(new FinalizarAgente(this));
+		//addBehaviour(new FinalizarAgente(this));
 		
+	}
+	
+	public int getQtdReputacoesRecebidas(){
+		return qtdReputacoesRecebidas;
+	}
+	
+	public void incrementaReputacoesRecebidas(){
+		qtdReputacoesRecebidas++;
 	}
 	
 	public void addCupomCompradoComSucesso(ListaDeCupons lista){
@@ -202,4 +211,15 @@ public class AgenteIniciante extends AgenteContractNet {
 			melhoresPropostas.put(cupom.toString(), null);
 		}
 	}*/
+	
+	public void verResultados(){
+		for(ListaDeCupons lista : this.getCuponsCompradosComSucesso()){
+			for(Cupom cupom : lista){
+				System.out.println("***************************************");
+				System.out.println("Comprei o cupom : " + cupom.toString());
+				System.out.println("Do agente : " + lista.getAID().getName());
+				System.out.println("Pelo valor de : R$" + cupom.getValor());
+			}
+		}
+	}
 }

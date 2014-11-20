@@ -1,5 +1,8 @@
 package br.ufc.quixada.smas.comportamento.iniciante;
 
+import java.io.IOException;
+import java.util.Random;
+
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.Proposta;
@@ -38,12 +41,31 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 				} else if(mensagem.getPerformative() == ACLMessage.INFORM){
 					try {
 						agente.addCupomCompradoComSucesso((ListaDeCupons) mensagem.getContentObject());
+						Random random = new Random();
+						Reputacao reputacao = new Reputacao(mensagem.getSender(),random.nextInt(3)+ 8);
+						ACLMessage salvarReputacao = new ACLMessage(ACLMessage.INFORM);
+						salvarReputacao.setContentObject(reputacao);
+						salvarReputacao.addReceiver(agente.getSistemaDeReputacaoAID());
+						agente.send(salvarReputacao);
 					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else if(mensagem.getPerformative() == ACLMessage.FAILURE){
 					
+					Reputacao reputacao = new Reputacao(mensagem.getSender(),0);
+					ACLMessage salvarReputacao = new ACLMessage(ACLMessage.INFORM);
+					try {
+						salvarReputacao.setContentObject(reputacao);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					salvarReputacao.addReceiver(agente.getSistemaDeReputacaoAID());
+					agente.send(salvarReputacao);
 				}
 				
 			}else if(mensagem.getPerformative() == ACLMessage.INFORM &&
@@ -54,7 +76,7 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 				try {
 					
 					System.out.println("Recebi uma Reputacao, vou atualizar");
-					agente.setRecebiReputacao(true);
+					agente.incrementaReputacoesRecebidas();
 					reputacao = (Reputacao) mensagem.getContentObject();
 					Proposta proposta = agente.getProposta(reputacao.getAidAgente());
 					proposta.setReputacao(reputacao);

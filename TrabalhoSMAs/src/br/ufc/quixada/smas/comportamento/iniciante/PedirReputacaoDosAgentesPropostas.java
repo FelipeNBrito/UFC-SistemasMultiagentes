@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import br.ufc.quixada.smas.objetos.Proposta;
+import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -24,11 +25,18 @@ public class PedirReputacaoDosAgentesPropostas extends Behaviour{
 		
 		if(agente.getPasso() == 4){
 		
-			if(agente.getPropostas().size() > 0){
-				esperarMuito();
-				esperarMuito();
-				esperarMuito();
-				esperarMuito();
+			Iterator<AID> itTMP = agente.getAgentesVendedores();
+			int cont = 0;
+			while(itTMP.hasNext()){
+				itTMP.next();
+				cont++;
+			}
+			
+			if(agente.getPropostas().size() > 0 && agente.getPropostas().size() == cont){
+				//esperarMuito();
+				//esperarMuito();
+				//esperarMuito();
+				//esperarMuito();
 			
 			
 				System.out.println("Passo 4");

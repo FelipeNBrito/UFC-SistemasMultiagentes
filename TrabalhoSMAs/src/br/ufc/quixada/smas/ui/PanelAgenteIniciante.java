@@ -21,6 +21,7 @@ public class PanelAgenteIniciante extends JPanel implements ActionListener {
 	private JLabel lableCupom;
 	private JButton botaoAddCupom;
 	private JButton botaoFinalizar;
+	private JButton botaoVerResultados;
 	private JTextField textoCupomNome;
 	private JTextField textoCupomPreco;
 	private JLabel labelCuponsAdicionados;
@@ -33,6 +34,7 @@ public class PanelAgenteIniciante extends JPanel implements ActionListener {
 		textoCupomPreco = new JTextField("Preço do Cupom");
 		botaoAddCupom = new JButton("Add Cupom");
 		botaoFinalizar = new JButton("Finalizar");
+		botaoVerResultados = new JButton("Ver Resultados");
 		labelCuponsAdicionados = new JLabel("");
 		
 		lableCupom.setBounds(100,100,100,20);
@@ -40,7 +42,8 @@ public class PanelAgenteIniciante extends JPanel implements ActionListener {
 		textoCupomPreco.setBounds(300, 100, 100, 20);
 		botaoAddCupom.setBounds(400,100,100,20);
 		botaoFinalizar.setBounds(100,200,100,20);
-		labelCuponsAdicionados.setBounds(400, 400, 200, 400);
+		//labelCuponsAdicionados.setBounds(400, 400, 200, 400);
+		botaoVerResultados.setBounds(100, 400, 100, 20);
 		
 	    //Adiciona o 
 	    this.add(this.lableCupom);
@@ -48,10 +51,12 @@ public class PanelAgenteIniciante extends JPanel implements ActionListener {
 	    this.add(this.textoCupomPreco);
 	    this.add(this.botaoAddCupom);
 	    this.add(this.botaoFinalizar);
+	    this.add(botaoVerResultados);
 	    //this.add(this.labelCuponsAdicionados);
 	    
 	    this.botaoAddCupom.addActionListener(this);
 	    this.botaoFinalizar.addActionListener(this);
+	    this.botaoVerResultados.addActionListener(this);
 	    this.textoCupomNome.addMouseListener(this.addEventoMouse());
 	    this.textoCupomPreco.addMouseListener(this.addEventoMouse());
 
@@ -62,15 +67,12 @@ public class PanelAgenteIniciante extends JPanel implements ActionListener {
 		 if(e.getSource()==this.botaoAddCupom){
 			 this.agente.addCupomDesejado(textoCupomNome.getText(),Double.parseDouble(textoCupomPreco.getText()));
 		      JOptionPane.showMessageDialog(null,agente.getQuantidadeDeCuponsDesejados());
-		     /* String cuponsDes = "";
-		      for(Cupom cupom : agente.getListaDeCuponsDesejados()){
-		    	  cuponsDes += cupom.toString() + "\n";
-		      }
-		     labelCuponsAdicionados.setText(cuponsDes);*/
+		     
 		 } else if(e.getSource()==this.botaoFinalizar){
-			 JOptionPane.showMessageDialog(null,"asas");
 			 agente.incrementaPasso();
 			 this.botaoAddCupom.setEnabled(false);
+		 }else if(e.getSource()==this.botaoVerResultados){
+			 agente.verResultados();
 		 }
 	}
 	

@@ -17,7 +17,7 @@ public class FinalizarAgente extends Behaviour {
 	@Override
 	public void action() {
 		
-		if(agente.getPasso() == 9 && agente.getCuponsCompradosComSucesso().size() > 0){
+		if(agente.getPasso() == 9 && agente.getCuponsCompradosComSucesso().size() > 1){
 			System.out.println("PASSO 9 AI");
 			
 			for(ListaDeCupons lista : agente.getCuponsCompradosComSucesso()){

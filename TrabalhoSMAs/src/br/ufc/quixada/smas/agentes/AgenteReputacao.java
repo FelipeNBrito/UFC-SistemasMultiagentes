@@ -5,6 +5,7 @@ import java.util.Map;
 
 import br.ufc.quixada.smas.comportamento.agentedereputacao.EsperarReputacaoCyclicBehavior;
 import br.ufc.quixada.smas.objetos.RepositorioReputacaoAgente;
+import br.ufc.quixada.smas.objetos.Reputacao;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -28,6 +29,13 @@ public class AgenteReputacao extends Agent{
 			reputacoes.put(agenteAid, repositorio);
 		}
 		return repositorio;
+	}
+	
+	public void addReputacao(Reputacao reputacao){
+		RepositorioReputacaoAgente repositorio = reputacoes.get(reputacao.getAidAgente());
+		repositorio.adicionarReputacao((int) reputacao.getValor());
+		reputacoes.put(reputacao.getAidAgente(), repositorio);
+		
 	}
 	
 	protected void setup(){

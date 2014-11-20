@@ -33,24 +33,13 @@ public class EsperarReputacaoCyclicBehavior extends CyclicBehaviour {
 			if(mensagem.getPerformative() == ACLMessage.INFORM){ // O agente esta informando uma reputacao
 			
 				try {
-					System.out.println("Enviando reputacao");
 					Reputacao reputacao = (Reputacao) mensagem.getContentObject();
-					
-					RepositorioReputacaoAgente repositorioReputacaoAgente = this.agenteReputacao.getRepositorioReputacao(reputacao.getAidAgente());
-
-					reputacao = repositorioReputacaoAgente.pegarReputacao();
-					
-					mensagemDeRetorno.setContentObject(reputacao);
-					
-					this.agenteReputacao.send(mensagemDeRetorno);
+					agenteReputacao.addReputacao(reputacao);
 					
 				} catch (UnreadableException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} 
 				
 			} else if(mensagem.getPerformative() == ACLMessage.REQUEST){
 				

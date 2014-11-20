@@ -27,7 +27,7 @@ public class AnalisarPropostas extends Behaviour{
 	@Override
 	public void action() {
 
-		if(agente.getPasso() == 5 && agente.getPropostas().size() > 0 && agente.isRecebiReputacao()){
+		if(agente.getPasso() == 5 && agente.getPropostas().size() > 0 && agente.getPropostas().size() == agente.getQtdReputacoesRecebidas()){
 			
 			melhoresPropostas = agente.getHashMapMelhoresPropostas();
 			Iterator<Cupom> it = agente.getListaDeCuponsDesejados().iterator();
@@ -60,7 +60,7 @@ public class AnalisarPropostas extends Behaviour{
 						while(meusCupons.hasNext()){
 							Cupom meuCupom = meusCupons.next();
 							
-							if(cupomVendedor.toString().equalsIgnoreCase(meuCupom.toString())){ // Se o cupom for o mesmo
+							if(cupomVendedor.toString().equalsIgnoreCase(meuCupom.toString()) && cupomVendedor.getValor() <= meuCupom.getValor()){ // Se o cupom for o mesmo
 								
 								MelhorPropostaCupom melhorProposta = melhoresPropostas.get(meuCupom.toString());
 								
