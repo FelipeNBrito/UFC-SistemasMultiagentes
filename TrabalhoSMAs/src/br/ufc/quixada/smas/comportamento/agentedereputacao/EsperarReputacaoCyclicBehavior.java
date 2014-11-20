@@ -20,17 +20,20 @@ public class EsperarReputacaoCyclicBehavior extends CyclicBehaviour {
 	@Override
 	public void action() {
 		
+		//System.out.println("Executando comportamento esperarReputacao");
+		
 		ACLMessage mensagem = this.agenteReputacao.receive();
 		
 		if(mensagem != null){
 			
+			System.out.println("Recebi Mensagem");
 			ACLMessage mensagemDeRetorno = mensagem.createReply();
 			AID agenteEmissorAid = mensagem.getSender();
 			
 			if(mensagem.getPerformative() == ACLMessage.INFORM){ // O agente esta informando uma reputacao
 			
 				try {
-					
+					System.out.println("Enviando reputacao");
 					Reputacao reputacao = (Reputacao) mensagem.getContentObject();
 					
 					RepositorioReputacaoAgente repositorioReputacaoAgente = this.agenteReputacao.getRepositorioReputacao(reputacao.getAidAgente());
@@ -58,6 +61,10 @@ public class EsperarReputacaoCyclicBehavior extends CyclicBehaviour {
 					RepositorioReputacaoAgente repositorioReputacao = this.agenteReputacao.getRepositorioReputacao(agenteAid);
 					
 					Reputacao reputacao = repositorioReputacao.pegarReputacao();
+					
+					if(reputacao == null){
+						reputacao = new Reputacao(agenteAid, -1);
+					}
 					
 					mensagemDeRetorno.setContentObject(reputacao);
 					mensagemDeRetorno.setPerformative(ACLMessage.INFORM);

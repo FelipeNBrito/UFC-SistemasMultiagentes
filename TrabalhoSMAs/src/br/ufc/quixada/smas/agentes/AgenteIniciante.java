@@ -1,10 +1,14 @@
 package br.ufc.quixada.smas.agentes;
 
+import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import br.ufc.quixada.smas.comportamento.iniciante.AnalisarPropostas;
 import br.ufc.quixada.smas.comportamento.iniciante.BuscarAgentesVendedores;
@@ -17,15 +21,19 @@ import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.MelhorPropostaCupom;
 import br.ufc.quixada.smas.objetos.Proposta;
 import br.ufc.quixada.smas.objetos.Reputacao;
+import br.ufc.quixada.smas.ui.JanelaAgenteIniciante;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 public class AgenteIniciante extends AgenteContractNet {
 	
+	private int passo = 0;
 	private boolean compraDeAgentesComReputacaoDesconhecida; // TODO: 
 	
+	private JanelaAgenteIniciante janela;
+	
 	private List<AID> agentesVendedores;
-	private ListaDeCupons cupons;
+	private ListaDeCupons cuponsDesejados; // Cupons que ele quer adquirir
 	private HashMap<AID, Proposta> propostas;
 	private ArrayList<Proposta> propostasRejeitadasPelaReputacao; // TODO : Inicializar
 	private HashMap<String,MelhorPropostaCupom> melhoresPropostas; // TODO : Iniciar com null
@@ -37,21 +45,35 @@ public class AgenteIniciante extends AgenteContractNet {
 	
 	protected void setup(){
 		
+		criarJanela();
+		
+		cuponsDesejados = new ListaDeCupons();
 		agentesVendedores = new ArrayList<AID>();
+		
 		
 		addBehaviour(new ReceberMensagemAgenteIniciante(this));
 		addBehaviour(new BuscarSistemaDeReputacaoBehavior(this));
 		addBehaviour(new BuscarAgentesVendedores(this));
-		addBehaviour(new EnviarMensagemCFP(this));
-		addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
-		addBehaviour(new AnalisarPropostas(this));
+		//addBehaviour(new EnviarMensagemCFP(this));
+		//addBehaviour(new PedirReputacaoDosAgentesPropostas(this));
+		//addBehaviour(new AnalisarPropostas(this));
 		
 		
 		//TODO : Receber resposta das CFPs
 		
 	}
 	
+	public void addCupomDesejado(String nome, double valor){
+		 this.cuponsDesejados.add(new Cupom(nome,valor));
+	}
 	
+	public int getQuantidadeDeCuponsDesejados(){
+		return this.cuponsDesejados.size();
+	}
+	
+	public ListaDeCupons getListaDeCuponsDesejados(){
+		return this.cuponsDesejados;
+	}
 	public ArrayList<Proposta> getPropostasRejeitadasPelaReputacao(){
 		return propostasRejeitadasPelaReputacao;
 	}
@@ -98,7 +120,7 @@ public class AgenteIniciante extends AgenteContractNet {
 	}
 	
 	public ListaDeCupons getListaDeCupons(){
-		return this.cupons;
+		return this.cuponsDesejados;
 	}
 	
 	public void addProposta(Proposta proposta){
@@ -123,5 +145,17 @@ public class AgenteIniciante extends AgenteContractNet {
 	
 	public void addCupomNaoEncontrado(Cupom cupom){
 		cuponsNaoEncontrados.add(cupom);
+	}
+	
+	public int getPasso(){
+		return passo;
+	}
+	
+	public void incrementaPasso(){
+		passo++;
+	}
+	
+	private void criarJanela(){
+		this.janela = new JanelaAgenteIniciante(this);
 	}
 }

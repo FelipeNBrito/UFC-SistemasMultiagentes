@@ -34,7 +34,7 @@ public class AgenteReputacao extends Agent{
 		// Criacao do servico de reputacao
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType("Reputacao-Agentes");
-		sd.setName("Reputacao");
+		sd.setName("Reputacao-Agentes");
 		dfd.addServices(sd); // Adiciona o servico
 		
 		
@@ -48,8 +48,7 @@ public class AgenteReputacao extends Agent{
 		addBehaviour(new EsperarReputacaoCyclicBehavior(this));
 	}
 	
-	protected void takeDown(){
-		
+	protected void takeDown(){	
 		//Remove o agente das paginas amarelas quando o agente encerra
 		try{
 			DFService.deregister(this);

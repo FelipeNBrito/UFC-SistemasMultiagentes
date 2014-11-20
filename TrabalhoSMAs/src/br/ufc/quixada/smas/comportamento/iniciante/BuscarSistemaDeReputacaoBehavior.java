@@ -1,6 +1,7 @@
 package br.ufc.quixada.smas.comportamento.iniciante;
 
 import br.ufc.quixada.smas.agentes.AgenteContractNet;
+import br.ufc.quixada.smas.agentes.AgenteIniciante;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
@@ -11,39 +12,51 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class BuscarSistemaDeReputacaoBehavior extends Behaviour{
 	
-	private AgenteContractNet agente;
-	private long delay;
+	private AgenteIniciante agente;
+	private long delay = 9000000;
 	
-	public BuscarSistemaDeReputacaoBehavior(AgenteContractNet agente) {
+	public BuscarSistemaDeReputacaoBehavior(AgenteIniciante agente) {
 		this.agente = agente;
-		this.delay = 200;
 	}
 	
 	@Override
 	public void action() {
+		
 			block(delay);
 			
-			DFAgentDescription template = new DFAgentDescription();
+			if(agente.getPasso() == 1){
 			
-			ServiceDescription sd = new ServiceDescription();
-			sd.setType("Reputacao-Agentes");
 		
-			try {
-				DFAgentDescription[] result = DFService.search((Agent) agente, template);
+				DFAgentDescription template = new DFAgentDescription();
 				
-				if( result.length > 0 && result[0].getName() != null){
-					agente.setSistemaDeReputacaoAID(result[0].getName());
+				ServiceDescription sd = new ServiceDescription();
+				sd.setType("Reputacao-Agentes");
+				sd.setName("Reputacao-Agentes");
+				
+				template.addServices(sd);
+			
+				try {
+					DFAgentDescription[] result = DFService.search((Agent) agente, template);
+					System.out.println(result.length);
+					if( result.length > 0 && result[0].getName() != null){
+						agente.setSistemaDeReputacaoAID(result[0].getName());
+					}
+					
+				} catch (FIPAException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				
-			} catch (FIPAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 	}
 
 	@Override
 	public boolean done() {
-		return agente.getSistemaDeReputacaoAID() != null;
+		
+		if(agente.getSistemaDeReputacaoAID() != null){
+			agente.incrementaPasso();
+			return true;
+		}
+		return false;
 	}
 
 }

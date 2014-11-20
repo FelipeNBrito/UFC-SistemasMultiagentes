@@ -6,13 +6,17 @@ import java.util.Date;
 
 public class Cupom implements Serializable{
 
-	private String Nome;
+	private String nome;
 	private double valor;
-	private Date horario;
+	
+	public Cupom(String nome, double valor) {
+		this.nome = nome;
+		this.valor = valor;
+	}
 	
 	@Override
 	public String toString() {
-		return this.Nome;
+		return this.nome;
 	}
 	
 	public double getValor(){

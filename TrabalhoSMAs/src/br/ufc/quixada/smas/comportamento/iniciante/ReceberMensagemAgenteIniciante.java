@@ -23,14 +23,16 @@ public class ReceberMensagemAgenteIniciante extends Behaviour{
 		ACLMessage mensagem = agente.receive();
 		
 		if(mensagem != null){
-
+			
 			if(mensagem.getProtocol().equals(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET)){
 				
 				if(mensagem.getPerformative() == ACLMessage.PROPOSE){
 					Proposta proposta = new Proposta(mensagem);
 					agente.addProposta(proposta);
-				} else{
-					//TODO: REFUSE
+				} else if(mensagem.getPerformative() == ACLMessage.INFORM){
+					
+				}else if(mensagem.getPerformative() == ACLMessage.FAILURE){
+					
 				}
 				
 			}else if(mensagem.getPerformative() == ACLMessage.INFORM &&

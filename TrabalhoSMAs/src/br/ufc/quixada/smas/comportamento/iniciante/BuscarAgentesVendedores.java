@@ -23,29 +23,32 @@ public class BuscarAgentesVendedores extends Behaviour{
 	public void action() {
 		block(delay);
 		
-		DFAgentDescription template = new DFAgentDescription();
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType("venda-de-cupons");
-		template.addServices(sd);
+		if(agente.getPasso() == 2){
 		
-		try {
-			DFAgentDescription[] result = DFService.search(agente, template);
+			DFAgentDescription template = new DFAgentDescription();
+			ServiceDescription sd = new ServiceDescription();
+			sd.setType("venda-de-cupons");
+			template.addServices(sd);
 			
-			for(int i = 0; i < result.length; i++){
-				agente.addAgenteVendedor(result[i].getName());
+			try {
+				DFAgentDescription[] result = DFService.search(agente, template);
+				
+				for(int i = 0; i < result.length; i++){
+					//System.out.println(result[i].getName());
+					agente.addAgenteVendedor(result[i].getName());
+				}
+				
+			} catch (FIPAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
 	public boolean done() {
-		// TODO Auto-generated method stub
-		return false;
+		agente.incrementaPasso();
+		return true;
 	}
 
 }

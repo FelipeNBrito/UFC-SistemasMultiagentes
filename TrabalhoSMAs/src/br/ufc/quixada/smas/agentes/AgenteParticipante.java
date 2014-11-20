@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import br.ufc.quixada.smas.comportamento.participante.ReceberMensagensAgenteParticipante;
+import br.ufc.quixada.smas.objetos.Cupom;
 import br.ufc.quixada.smas.objetos.ListaDeCupons;
 import br.ufc.quixada.smas.objetos.Reputacao;
+import br.ufc.quixada.smas.ui.JanelaAgenteParticipante;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -18,11 +22,17 @@ public class AgenteParticipante extends AgenteContractNet{
 	private List<ACLMessage> mensagensCFP;
 	private ListaDeCupons cupons;
 	private List<ACLMessage> propostas;
+	private JFrame janela;
 	
-	final private double MIN_REPUTACAO_ACEITACAO = 7.00;
+	private int passo;
+	
+	private int probabilidadeDeAcerto; //TODO
 	
 	protected void setup(){
 		
+		criarJanela();
+		
+		cupons = new ListaDeCupons();
 		mensagensCFP = new ArrayList<ACLMessage>();
 		propostas = new ArrayList<ACLMessage>();
 		
@@ -83,4 +93,27 @@ public class AgenteParticipante extends AgenteContractNet{
 		return this.cupons;
 	}
 	
+	public void addCupom(String nome, double valor){
+		this.cupons.add(new Cupom(nome,valor));
+	}
+	
+	public int getQuantidadeDeCupons(){
+		return cupons.size();
+	}
+	
+	public int getProbabilidadeDeAcerto(){
+		return this.probabilidadeDeAcerto;
+	}
+	
+	public int getPasso(){
+		return passo;
+	}
+	
+	public void incrementaPasso(){
+		passo++;
+	}
+	
+	public void criarJanela(){
+		this.janela = new JanelaAgenteParticipante(this);
+	}
 }
